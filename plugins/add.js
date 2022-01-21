@@ -1,10 +1,6 @@
 let fetch = require('node-fetch')
-
-let handler = async (m, { conn, args, text, participants }) => {
-  if (m.quoted) {
-    await conn.groupAdd(m.chat, [m.quoted.sender]).catch(_ => _)
-  }
-  if (!text) throw `uhm.. nomornya mana?\n\ncontoh:\n\n${usedPrefix + command + ' ' + global.owner[0]}`
+let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
+  if (!text) throw `_Masukkan nomor!_ \nContoh:\n\n${usedPrefix + command + ' ' + global.owner[0]}`
   let _participants = participants.map(user => user.jid)
   let users = (await Promise.all(
     text.split(',')
@@ -16,7 +12,7 @@ let handler = async (m, { conn, args, text, participants }) => {
       ])
   )).filter(v => v[1]).map(v => v[0] + '@c.us')
   let response = await conn.groupAdd(m.chat, users)
-  if (response[users] == 408) throw `_Gagal!_\n\nNomor tersebut telah keluar baru² ini\nHanya bisa masuk lewat *${usedPrefix}link* grup`
+  if (response[users] == 408) throw `_Gagal!_\n\nNomor tersebut telah keluar baru² ini\nHanya bisa masuk lewat *${usedPrefix}link* group`
   let pp = await conn.getProfilePicture(m.chat).catch(_ => false)
   let jpegThumbnail = pp ? await (await fetch(pp)).buffer() : false
   for (let user of response.participants.filter(user => Object.values(user)[0].code == 403)) {
@@ -38,10 +34,16 @@ let handler = async (m, { conn, args, text, participants }) => {
 handler.help = ['add', '+'].map(v => v + ' nomor,nomor')
 handler.tags = ['admin']
 handler.command = /^(add|\+)$/i
-
+handler.owner = false
+handler.mods = false
+handler.premium = false
 handler.group = true
+handler.private = false
+
 handler.admin = true
 handler.botAdmin = true
+
+handler.fail = null
 handler.limit = true
 
 module.exports = handler
