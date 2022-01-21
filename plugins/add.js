@@ -1,5 +1,5 @@
 let fetch = require('node-fetch')
-let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
+let handler = async (m, { conn, text, participants }) => {
   if (!text) throw `_Masukkan nomor!_ \nContoh:\n\n${usedPrefix + command + ' ' + global.owner[0]}`
   let _participants = participants.map(user => user.jid)
   let users = (await Promise.all(
