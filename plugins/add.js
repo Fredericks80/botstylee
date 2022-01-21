@@ -1,6 +1,6 @@
 let fetch = require('node-fetch')
 
-let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
+let handler = async (m, { conn, text, participants }) => {
   if (m.quoted) {
     await conn.groupAdd(m.chat, [m.quoted.sender]).catch(_ => _)
   }
