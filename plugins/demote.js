@@ -1,4 +1,4 @@
-let handler = async (m, { conn, args, participants }) => {
+let handler = async (m, { conn, args, usedPrefix }) => {
   if (m.quoted) {
     await conn.groupDemoteAdmin(m.chat, [m.quoted.sender]).catch(console.log)
   }
